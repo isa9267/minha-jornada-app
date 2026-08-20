@@ -1,0 +1,14 @@
+{
+  "name": "Minha Jornada - Emagrecimento",
+  "short_name": "Minha Jornada",
+  "description": "Acompanhe seu emagrecimento como uma jornada em um tabuleiro, com metas, recompensas, pesagens e fotos.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f5fb",
+  "theme_color": "#7c3aed",
+  "orientation": "portrait-primary",
+  "icons": [
+    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}

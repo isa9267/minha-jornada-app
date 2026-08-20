@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#7c3aed" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Minha Jornada" />
+  <title>Minha Jornada</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <style>
+    :root{
+      --bg:#f7f5fb; --surface:#ffffff; --text:#231b2e; --muted:#786d85;
+      --primary:#7c3aed; --primary2:#a855f7; --accent:#f59e0b; --success:#16a34a;
+      --danger:#dc2626; --line:#e7e0ef; --shadow:0 12px 34px rgba(59,34,86,.10);
+      --radius:22px;
+    }
+    *{box-sizing:border-box}
+    body{margin:0;background:linear-gradient(180deg,#faf8ff 0,#f6f3f9 60%,#f2eef7 100%);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;min-height:100vh}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .shell{max-width:980px;margin:0 auto;min-height:100vh;padding:0 16px calc(94px + env(safe-area-inset-bottom))}
+    header{padding:22px 4px 14px;display:flex;align-items:center;justify-content:space-between;gap:12px;position:sticky;top:0;background:rgba(247,245,251,.88);backdrop-filter:blur(14px);z-index:15}
+    .brand{display:flex;align-items:center;gap:11px}.brand-badge{width:42px;height:42px;border-radius:14px;background:linear-gradient(135deg,var(--primary),#ec4899);display:grid;place-items:center;box-shadow:var(--shadow);font-size:22px}.brand h1{font-size:20px;margin:0}.brand small{display:block;color:var(--muted);margin-top:2px}
+    .icon-btn{border:0;background:var(--surface);width:42px;height:42px;border-radius:14px;box-shadow:0 4px 15px rgba(52,32,78,.07)}
+    .view{display:none;animation:fade .18s ease}.view.active{display:block}@keyframes fade{from{opacity:.4;transform:translateY(4px)}to{opacity:1;transform:none}}
+    .hero{background:radial-gradient(circle at 100% 0,#c4b5fd 0,transparent 38%),linear-gradient(135deg,#5b21b6,#7c3aed 55%,#a855f7);border-radius:28px;padding:24px;color:white;box-shadow:0 18px 50px rgba(91,33,182,.22);overflow:hidden;position:relative}
+    .hero h2{font-size:28px;margin:4px 0 6px}.hero p{margin:0;color:#ede9fe}.hero-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}.hero-stat{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.16);border-radius:17px;padding:13px}.hero-stat b{font-size:20px;display:block}.hero-stat span{font-size:12px;color:#ede9fe}
+    .progress{height:12px;background:rgba(255,255,255,.22);border-radius:999px;margin-top:17px;overflow:hidden}.progress > div{height:100%;background:white;border-radius:999px;transition:width .35s ease}
+    .grid2{display:grid;grid-template-columns:1.15fr .85fr;gap:16px;margin-top:16px}.card{background:var(--surface);border:1px solid rgba(109,76,139,.08);border-radius:var(--radius);padding:19px;box-shadow:0 8px 28px rgba(52,32,78,.06)}.card h3{margin:0 0 4px;font-size:18px}.sub{color:var(--muted);font-size:13px;margin:0 0 15px}
+    .board-wrap{overflow:auto;padding:8px 2px 4px}.board{display:grid;grid-template-columns:repeat(7,minmax(42px,1fr));gap:8px;min-width:360px}.tile{aspect-ratio:1;border-radius:15px;background:#f2edf7;border:1px solid #e5dcec;display:flex;align-items:center;justify-content:center;position:relative;font-weight:800;color:#7d708a;font-size:12px;transition:.2s}.tile.done{background:linear-gradient(145deg,#ddd6fe,#c4b5fd);color:#4c1d95;border-color:#c4b5fd}.tile.current{background:linear-gradient(145deg,#7c3aed,#a855f7);color:white;transform:scale(1.06);box-shadow:0 7px 18px rgba(124,58,237,.28);z-index:2}.tile.goal{outline:2px solid #f59e0b;outline-offset:1px}.tile .emoji{position:absolute;top:-6px;right:-5px;font-size:15px}.tile .you{position:absolute;bottom:-7px;background:#241235;color:#fff;font-size:9px;padding:2px 6px;border-radius:999px;white-space:nowrap}.tile.special{cursor:pointer}.tile.special:active{transform:scale(.98)}.goal-detail-photo{width:100%;height:auto;max-height:70vh;object-fit:contain;border-radius:20px;margin-bottom:14px;background:#eee7f3;display:block}.goal-detail-card{background:#faf7ff;border:1px solid #eadff5;border-radius:18px;padding:15px}.goal-detail-card h3{margin:0 0 6px}.goal-detail-card p{margin:4px 0;color:var(--muted)}.board-legend{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px;color:var(--muted);font-size:12px}.dot{width:10px;height:10px;border-radius:50%;display:inline-block;margin-right:4px;vertical-align:-1px}.dot.done{background:#c4b5fd}.dot.current{background:#7c3aed}.dot.goal{background:#f59e0b}
+    .board-view-toggle{display:flex;gap:7px;flex-wrap:wrap;margin:13px 0 8px}.board-view-toggle button{border:1px solid #ded3e8;background:#fff;color:var(--muted);border-radius:999px;padding:8px 12px;font:inherit;font-size:12px;font-weight:800;cursor:pointer}.board-view-toggle button.active{background:#7c3aed;color:#fff;border-color:#7c3aed}.board-view-toggle button:focus-visible{outline:3px solid rgba(124,58,237,.22);outline-offset:2px}
+    .next-goal{display:flex;gap:12px;align-items:center;padding:13px;background:#faf7ff;border-radius:17px;margin-top:10px}.reward-icon{width:48px;height:48px;border-radius:16px;background:#fff1cc;display:grid;place-items:center;font-size:25px;flex:none}.next-goal b{display:block}.next-goal span{font-size:13px;color:var(--muted)}
+    .section-title{display:flex;justify-content:space-between;align-items:end;margin:24px 2px 12px}.section-title h2{margin:0;font-size:24px}.section-title p{margin:4px 0 0;color:var(--muted);font-size:13px}
+    .btn{border:0;border-radius:14px;padding:12px 15px;font-weight:750;background:var(--primary);color:white;box-shadow:0 7px 16px rgba(124,58,237,.16)}.btn.secondary{background:#f1ebf8;color:#54247d;box-shadow:none}.btn.danger{background:#fee2e2;color:#991b1b;box-shadow:none}.btn.small{padding:8px 11px;border-radius:11px;font-size:13px}.btn.full{width:100%}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{margin-bottom:13px}.field label{display:block;font-size:13px;color:#564b61;font-weight:700;margin:0 0 6px}.field input,.field select,.field textarea{width:100%;border:1px solid #ddd3e7;border-radius:13px;padding:12px 13px;background:#fdfcff;color:var(--text);outline:none}.field input:focus,.field select:focus,.field textarea:focus{border-color:#a78bfa;box-shadow:0 0 0 3px #ede9fe}.field textarea{min-height:80px;resize:vertical}.hint{font-size:12px;color:var(--muted)}
+    .weight-list,.goal-list{display:flex;flex-direction:column;gap:10px}.list-item{padding:14px;border:1px solid var(--line);border-radius:16px;display:flex;justify-content:space-between;gap:14px;align-items:center}.list-item strong{display:block}.list-item small{color:var(--muted)}.delta{font-weight:800;font-size:13px}.delta.down{color:var(--success)}.delta.up{color:var(--danger)}
+    .goal-chip{display:inline-flex;gap:6px;align-items:center;background:#fff7df;color:#825a00;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:700;margin-top:5px}.goal-done{background:#e8f7ed;color:#166534}
+    .photo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.photo{position:relative;aspect-ratio:3/4;border-radius:17px;overflow:hidden;background:#eee7f3}.photo img{width:100%;height:100%;object-fit:cover;display:block}.photo .meta{position:absolute;left:0;right:0;bottom:0;padding:25px 9px 8px;background:linear-gradient(transparent,rgba(20,10,30,.82));color:white;font-size:11px}.photo .meta b{font-size:12px}.empty{text-align:center;padding:26px 10px;color:var(--muted)}
+    nav{position:fixed;bottom:12px;left:50%;transform:translateX(-50%);width:min(calc(100% - 22px),820px);height:70px;background:rgba(255,255,255,.93);border:1px solid rgba(101,72,126,.12);box-shadow:0 16px 40px rgba(55,33,79,.18);border-radius:24px;display:grid;grid-template-columns:repeat(7,1fr);z-index:40;padding:7px;backdrop-filter:blur(16px)}nav button{border:0;background:transparent;border-radius:16px;color:#887a95;font-size:10px;font-weight:700;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button span{font-size:20px;line-height:1}nav button.active{background:#f2ebfb;color:#6d28d9}
+    .evolution-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.evolution-card{background:var(--surface);border:1px solid rgba(109,76,139,.10);border-radius:22px;padding:14px;box-shadow:0 8px 28px rgba(52,32,78,.06)}.evolution-label{display:inline-block;background:#f2ebfb;color:#6d28d9;border-radius:999px;padding:5px 9px;font-size:12px;font-weight:800;margin-bottom:10px}.evolution-photo{width:100%;height:460px;object-fit:contain;background:#eee7f3;border-radius:18px;display:block}.evolution-meta{text-align:center;padding:12px 4px 2px}.evolution-meta b{display:block;font-size:18px}.evolution-meta span{color:var(--muted);font-size:13px}.evolution-empty{padding:34px 18px;text-align:center;color:var(--muted);background:var(--surface);border:1px dashed #d8cbe4;border-radius:22px}.evolution-caption{text-align:center;color:var(--muted);font-size:13px;margin-top:12px}@media(max-width:720px){.evolution-grid{grid-template-columns:1fr 1fr;gap:9px}.evolution-card{padding:8px}.evolution-photo{height:300px}.evolution-meta b{font-size:15px}.evolution-meta span{font-size:11px}}@media(max-width:450px){nav button{font-size:9px}nav button span{font-size:18px}.evolution-photo{height:240px}}
+    .challenge-list{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.challenge-card{background:var(--surface);border:1px solid rgba(109,76,139,.10);border-radius:22px;padding:17px;box-shadow:0 8px 28px rgba(52,32,78,.06);cursor:pointer}.challenge-card:hover{border-color:#c4b5fd}.challenge-top{display:flex;justify-content:space-between;gap:12px;align-items:start}.challenge-icon{width:48px;height:48px;border-radius:16px;background:#f2ebfb;display:grid;place-items:center;font-size:24px;flex:none}.challenge-card h3{margin:0 0 4px}.challenge-card p{margin:0;color:var(--muted);font-size:13px}.challenge-progress{height:9px;background:#eee8f3;border-radius:999px;overflow:hidden;margin:14px 0 8px}.challenge-progress>div{height:100%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:999px}.challenge-stats{display:flex;justify-content:space-between;gap:8px;font-size:12px;color:var(--muted)}.challenge-stats b{color:var(--text)}.challenge-detail-head{background:linear-gradient(135deg,#5b21b6,#8b5cf6);color:white;border-radius:24px;padding:20px;margin-bottom:15px}.challenge-detail-head h2{margin:0 0 5px}.challenge-detail-head p{margin:0;color:#ede9fe}.challenge-mini-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:15px}.challenge-mini-stats div{background:rgba(255,255,255,.13);border-radius:14px;padding:10px}.challenge-mini-stats b{display:block;font-size:17px}.challenge-mini-stats span{font-size:10px;color:#ede9fe}.challenge-board{display:grid;grid-template-columns:repeat(7,minmax(42px,1fr));gap:8px;min-width:360px}.challenge-entry-list{display:flex;flex-direction:column;gap:9px}.challenge-meta{padding:12px;border:1px solid var(--line);border-radius:14px;display:flex;justify-content:space-between;gap:10px;align-items:center}.challenge-meta small{display:block;color:var(--muted)}
+    @media(max-width:720px){.challenge-list{grid-template-columns:1fr}.challenge-mini-stats{grid-template-columns:repeat(2,1fr)}}
+    .modal{position:fixed;inset:0;background:rgba(28,15,39,.55);display:none;align-items:flex-end;justify-content:center;z-index:100;padding:12px}.modal.open{display:flex}.sheet{background:white;border-radius:28px 28px 20px 20px;max-width:680px;width:100%;max-height:92vh;overflow:auto;padding:22px;box-shadow:0 20px 80px rgba(0,0,0,.25)}.sheet-head{display:flex;justify-content:space-between;align-items:start;gap:10px;margin-bottom:16px}.sheet-head h2{margin:0}.sheet-head p{margin:4px 0;color:var(--muted);font-size:13px}.close{border:0;background:#f2edf5;border-radius:12px;width:38px;height:38px}
+    .onboarding{align-items:center}.onboarding .sheet{border-radius:28px;max-width:760px}.stepper{display:flex;gap:7px;margin:2px 0 20px}.step-dot{height:6px;flex:1;background:#eee8f3;border-radius:999px}.step-dot.active{background:#7c3aed}.on-step{display:none}.on-step.active{display:block}.upload-box{border:2px dashed #d8cbe4;border-radius:17px;padding:18px;text-align:center;background:#fcfaff}.upload-box input{max-width:100%}
+    .install{background:#eef2ff;border:1px solid #d9ddff;color:#3730a3;border-radius:17px;padding:14px;margin-top:16px;font-size:13px}.settings-actions{display:grid;grid-template-columns:1fr 1fr;gap:10px}.tag{display:inline-block;border-radius:999px;padding:5px 9px;background:#f2edf7;color:#6f5c7b;font-size:12px;font-weight:700}.toast{position:fixed;left:50%;bottom:96px;transform:translateX(-50%) translateY(20px);background:#24182e;color:white;padding:11px 15px;border-radius:999px;font-size:13px;z-index:200;opacity:0;pointer-events:none;transition:.25s;max-width:90%;text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    @media(max-width:720px){.grid2{grid-template-columns:1fr}.hero-grid{grid-template-columns:repeat(2,1fr)}.hero{padding:20px}.hero h2{font-size:25px}.photo-grid{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:450px){.shell{padding-left:11px;padding-right:11px}.form-row{grid-template-columns:1fr}.hero-stat{padding:10px}.hero-stat b{font-size:17px}.card{padding:16px}.board{gap:6px}.tile{border-radius:12px}.settings-actions{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+<div class="shell">
+  <header>
+    <div class="brand"><div class="brand-badge">🎯</div><div><h1>Minha Jornada</h1><small>Seu progresso, passo a passo</small></div></div>
+    <button class="icon-btn" id="quickWeight" title="Nova pesagem">⚖️</button>
+  </header>
+
+  <main>
+    <section class="view active" id="dashboardView">
+      <div class="hero">
+        <div class="tag" style="background:rgba(255,255,255,.16);color:#fff">Jornada em andamento</div>
+        <h2 id="heroMessage">Você está construindo sua história ✨</h2>
+        <p id="heroSub">Registre sua primeira pesagem para começar.</p>
+        <div class="progress"><div id="progressBar" style="width:0%"></div></div>
+        <div class="hero-grid">
+          <div class="hero-stat"><b id="initialWeight">—</b><span>Peso inicial</span></div>
+          <div class="hero-stat"><b id="currentWeight">—</b><span>Peso atual</span></div>
+          <div class="hero-stat"><b id="lostWeight">—</b><span>Eliminados</span></div>
+          <div class="hero-stat"><b id="remainingWeight">—</b><span>Até o objetivo</span></div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <h3>🎲 Seu tabuleiro</h3>
+          <div class="board-view-toggle" aria-label="Visualização do tabuleiro">
+            <button type="button" id="boardViewAll" data-board-view="all">Todo o trajeto</button>
+            <button type="button" id="boardViewNext" data-board-view="next">Até a próxima meta</button>
+          </div>
+          <div class="board-wrap"><div class="board" id="board"></div></div>
+          <div class="board-legend"><span><i class="dot done"></i> percorrido</span><span><i class="dot current"></i> você</span><span><i class="dot goal"></i> meta/recompensa</span></div>
+        </div>
+        <div class="card">
+          <h3>🏆 Próxima conquista</h3><p class="sub">Seu próximo marco no caminho.</p>
+          <div id="nextGoalBox" class="empty">Adicione metas intermediárias para vê-las aqui.</div>
+          <button class="btn secondary full" style="margin-top:12px" data-open="goalModal">+ Adicionar meta</button>
+        </div>
+      </div>
+
+      <div class="section-title"><div><h2>Últimas pesagens</h2><p>Acompanhe como seu caminho está mudando.</p></div><button class="btn small" data-open="weightModal">+ Pesagem</button></div>
+      <div class="card"><div class="weight-list" id="recentWeights"></div></div>
+    </section>
+
+    <section class="view" id="weightsView">
+      <div class="section-title"><div><h2>Pesagens</h2><p>Cada registro atualiza automaticamente o tabuleiro.</p></div><button class="btn small" data-open="weightModal">+ Nova</button></div>
+      <div class="card"><div class="weight-list" id="allWeights"></div></div>
+    </section>
+
+    <section class="view" id="goalsView">
+      <div class="section-title"><div><h2>Metas & recompensas</h2><p>Transforme marcos em casas especiais da jornada.</p></div><button class="btn small" data-open="goalModal">+ Meta</button></div>
+      <div class="card"><div class="goal-list" id="goalList"></div></div>
+    </section>
+
+    <section class="view" id="photosView">
+      <div class="section-title"><div><h2>Álbum de evolução</h2><p>Fotos salvas em ordem cronológica, junto ao peso do dia.</p></div><div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end"><button class="btn secondary small" data-open="evolutionCompareModal">Ver evolução</button><button class="btn small" data-open="photoModal">+ Foto</button></div></div>
+      <div class="photo-grid" id="photoGrid"></div>
+    </section>
+
+
+    <section class="view" id="challengesView">
+      <div class="section-title"><div><h2>Outros desafios</h2><p>Crie jornadas paralelas com tabuleiro, metas e histórico próprios.</p></div><button class="btn small" data-open="challengeModal">+ Desafio</button></div>
+      <div id="challengeList" class="challenge-list"></div>
+    </section>
+
+    <section class="view" id="settingsView">
+      <div class="section-title"><div><h2>Configurações</h2><p>Edite sua jornada e mantenha um backup.</p></div></div>
+      <div class="card">
+        <div class="form-row"><div><span class="hint">Peso inicial</span><h3 id="setInitial">—</h3></div><div><span class="hint">Objetivo final</span><h3 id="setTarget">—</h3></div></div>
+        <div class="form-row" style="margin-top:12px"><div><span class="hint">Altura</span><h3 id="setHeight">—</h3></div><div><span class="hint">Tabuleiro</span><h3>1 peso por casa</h3></div></div>
+        <button class="btn secondary full" style="margin-top:16px" data-open="profileModal">Editar dados da jornada</button>
+      </div>
+      <div class="card" style="margin-top:14px"><h3>💾 Backup</h3><p class="sub">Exporte um arquivo com dados e fotos. Você pode importá-lo depois em outro aparelho.</p><div class="settings-actions"><button class="btn secondary" id="exportBtn">Exportar backup</button><label class="btn secondary" style="text-align:center">Importar backup<input type="file" id="importFile" accept="application/json" hidden></label></div></div>
+      <div class="install"><b>📱 Instalar no celular</b><br>Quando este app estiver hospedado em um endereço HTTPS, abra-o no navegador e escolha <b>Adicionar à Tela de Início / Instalar app</b>. Depois ele funciona como um aplicativo e também offline.</div>
+      <div class="card" style="margin-top:14px"><h3>Recomeçar</h3><p class="sub">Apaga todos os dados salvos neste aparelho.</p><button class="btn danger" id="resetBtn">Apagar todos os dados</button></div>
+    </section>
+  </main>
+</div>
+
+<nav>
+  <button class="active" data-view="dashboardView"><span>🎲</span>Jornada</button>
+  <button data-view="weightsView"><span>⚖️</span>Pesagens</button>
+  <button data-view="goalsView"><span>🏆</span>Metas</button>
+  <button data-view="photosView"><span>📸</span>Fotos</button>
+  <button data-view="challengesView"><span>🚀</span>Desafios</button>
+  <button data-view="settingsView"><span>⚙️</span>Ajustes</button>
+</nav>
+
+<div class="modal" id="evolutionCompareModal">
+  <div class="sheet">
+    <div class="sheet-head"><div><h2>Minha evolução ✨</h2><p>Sua foto mais antiga e sua foto mais recente, lado a lado.</p></div><button class="close" aria-label="Fechar">✕</button></div>
+    <div id="evolutionCompare"></div>
+  </div>
+</div>
+
+<div class="modal onboarding" id="onboardingModal">
+  <div class="sheet">
+    <div class="stepper"><div class="step-dot active"></div><div class="step-dot"></div><div class="step-dot"></div></div>
+    <div class="on-step active" data-step="0">
+      <div class="sheet-head"><div><h2>Crie sua jornada ✨</h2><p>Primeiro, registre de onde você está partindo.</p></div></div>
+      <div class="form-row"><div class="field"><label>Peso inicial (kg)</label><input id="onInitial" type="number" step="0.1" min="1" placeholder="Ex.: 145"></div><div class="field"><label>Altura (cm)</label><input id="onHeight" type="number" step="0.1" min="50" placeholder="Ex.: 174"></div></div>
+      <div class="field"><label>Fotos iniciais (opcional)</label><div class="upload-box"><input id="onPhotos" type="file" accept="image/*" multiple><div class="hint" style="margin-top:7px">Você pode selecionar frente, lado, costas ou quantas quiser.</div></div></div>
+      <div class="field"><label>Data em que essas fotos foram tiradas</label><input id="onPhotoDate" type="date"><div class="hint" style="margin-top:6px">Pode ser uma data antiga. O álbum mostrará esta data, não o dia em que você adicionou a foto.</div></div>
+      <button class="btn full" id="onNext1">Continuar</button>
+    </div>
+    <div class="on-step" data-step="1">
+      <div class="sheet-head"><div><h2>Defina a chegada 🎯</h2><p>O tabuleiro será construído automaticamente entre os dois pesos.</p></div></div>
+      <div class="field"><label>Objetivo final (kg)</label><input id="onTarget" type="number" step="0.1" min="1" placeholder="Ex.: 100"></div>
+      <div class="field"><label>Recompensa do objetivo final (opcional)</label><input id="onTargetReward" placeholder="Ex.: Comprar meu vestido dos sonhos"></div>
+      <div class="field"><label>Foto motivacional do objetivo final (opcional)</label><div class="upload-box"><input id="onTargetPhoto" type="file" accept="image/*"><div class="hint" style="margin-top:7px">Pode ser um vestido, uma viagem, uma foto de referência ou qualquer imagem que represente sua conquista.</div></div></div>
+      <div class="hint" style="margin-bottom:14px">Cada casinha terá um peso: a primeira será seu peso inicial e a última será seu objetivo final.</div>
+      <div style="display:flex;gap:9px"><button class="btn secondary" id="onBack1">Voltar</button><button class="btn" style="flex:1" id="onNext2">Continuar</button></div>
+    </div>
+    <div class="on-step" data-step="2">
+      <div class="sheet-head"><div><h2>Primeira recompensa 🏆</h2><p>Opcional: adicione uma meta intermediária agora. Você poderá criar quantas quiser.</p></div></div>
+      <div class="form-row"><div class="field"><label>Peso da meta (kg)</label><input id="onGoalWeight" type="number" step="0.1" placeholder="Ex.: 135"></div><div class="field"><label>Nome da meta</label><input id="onGoalName" placeholder="Ex.: Primeiros 10 kg"></div></div>
+      <div class="field"><label>Recompensa</label><input id="onGoalReward" placeholder="Ex.: Comprar um perfume novo"></div>
+      <div class="field"><label>Foto motivacional da meta (opcional)</label><div class="upload-box"><input id="onGoalPhoto" type="file" accept="image/*"></div></div>
+      <div style="display:flex;gap:9px"><button class="btn secondary" id="onBack2">Voltar</button><button class="btn" style="flex:1" id="finishOnboarding">Começar minha jornada</button></div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="weightModal"><div class="sheet"><div class="sheet-head"><div><h2>Nova pesagem ⚖️</h2><p>O tabuleiro se atualiza assim que você salvar.</p></div><button class="close">✕</button></div><div class="form-row"><div class="field"><label>Peso (kg)</label><input id="weightValue" type="number" step="0.1" min="1"></div><div class="field"><label>Data</label><input id="weightDate" type="date"></div></div><div class="field"><label>Observação (opcional)</label><textarea id="weightNote" placeholder="Como foi a semana, contexto, como você está se sentindo..."></textarea></div><button class="btn full" id="saveWeight">Salvar pesagem</button></div></div>
+
+<div class="modal" id="goalModal"><div class="sheet"><div class="sheet-head"><div><h2>Nova meta 🏆</h2><p>Ela aparecerá como uma casa especial no tabuleiro.</p></div><button class="close">✕</button></div><div class="form-row"><div class="field"><label>Peso da meta (kg)</label><input id="goalWeight" type="number" step="0.1"></div><div class="field"><label>Nome</label><input id="goalName" placeholder="Ex.: Meta 1"></div></div><div class="field"><label>Recompensa</label><input id="goalReward" placeholder="Ex.: Vestido novo, passeio, livro..."></div><div class="field"><label>Foto motivacional (opcional)</label><div class="upload-box"><input id="goalPhoto" type="file" accept="image/*"></div></div><button class="btn full" id="saveGoal">Salvar meta</button></div></div>
+
+<div class="modal" id="photoModal"><div class="sheet"><div class="sheet-head"><div><h2>Adicionar ao álbum 📸</h2><p>Você pode adicionar fotos de hoje ou de qualquer momento do passado.</p></div><button class="close">✕</button></div><div class="field"><label>Foto(s)</label><div class="upload-box"><input id="photoFiles" type="file" accept="image/*" multiple></div></div><div class="form-row"><div class="field"><label>Data em que a foto foi tirada</label><input id="photoDate" type="date"><div class="hint" style="margin-top:6px">Esta é a data que aparecerá no álbum.</div></div><div class="field"><label>Peso nessa época (kg, opcional)</label><input id="photoWeight" type="number" step="0.1"></div></div><div class="field"><label>Legenda (opcional)</label><input id="photoCaption" placeholder="Ex.: 1 mês de jornada"></div><button class="btn full" id="savePhoto">Salvar no álbum</button></div></div>
+
+<div class="modal" id="profileModal"><div class="sheet"><div class="sheet-head"><div><h2>Editar jornada</h2><p>Alterar início/objetivo recalcula todas as casinhas por peso.</p></div><button class="close">✕</button></div><div class="form-row"><div class="field"><label>Peso inicial (kg)</label><input id="editInitial" type="number" step="0.1"></div><div class="field"><label>Objetivo final (kg)</label><input id="editTarget" type="number" step="0.1"></div></div><div class="field"><label>Altura (cm)</label><input id="editHeight" type="number" step="0.1"></div><div class="field"><label>Recompensa do objetivo final (opcional)</label><input id="editTargetReward" placeholder="Ex.: Comprar meu vestido dos sonhos"></div><div class="field"><label>Trocar foto motivacional do objetivo final (opcional)</label><div class="upload-box"><input id="editTargetPhoto" type="file" accept="image/*"><div class="hint" id="editTargetPhotoHint" style="margin-top:7px"></div></div></div><button class="btn full" id="saveProfile">Salvar alterações</button></div></div>
+
+<div class="modal" id="goalDetailModal"><div class="sheet"><div class="sheet-head"><div><h2 id="detailTitle">Meta</h2><p id="detailWeight"></p></div><button class="close">✕</button></div><img id="detailPhoto" class="goal-detail-photo" alt="Foto motivacional" style="display:none"><div class="goal-detail-card"><h3>🎁 Recompensa</h3><p id="detailReward">—</p></div></div></div>
+
+<div class="modal" id="challengeModal"><div class="sheet"><div class="sheet-head"><div><h2 id="challengeModalTitle">Novo desafio 🚀</h2><p id="challengeModalSubtitle">Crie um tabuleiro independente para qualquer objetivo mensurável.</p></div><button class="close">✕</button></div><input type="hidden" id="challengeEditId">
+<div class="form-row"><div class="field"><label>Nome do desafio</label><input id="challengeName" placeholder="Ex.: Corrida"></div><div class="field"><label>Emoji</label><input id="challengeEmoji" placeholder="Ex.: 🏃" maxlength="4"></div></div>
+<div class="form-row"><div class="field"><label>Quanto você consegue hoje?</label><input id="challengeInitial" type="number" step="0.01" min="0" placeholder="Ex.: 0,3"></div><div class="field"><label>Qual é o objetivo?</label><input id="challengeTarget" type="number" step="0.01" min="0" placeholder="Ex.: 5"></div></div>
+<div class="form-row"><div class="field"><label>Unidade</label><input id="challengeUnit" placeholder="Ex.: km, min, repetições"></div><div class="field"><label>Quanto vale cada casinha?</label><input id="challengeStep" type="number" step="0.01" min="0.0001" placeholder="Ex.: 0,1"></div></div>
+<div class="hint" style="margin-bottom:14px">Você pode usar valores decimais. Exemplo para corrida: <b>0,3 km hoje → 5 km</b>, com casinhas de <b>0,1 km</b>. O app detecta automaticamente se o objetivo é aumentar ou diminuir o valor.</div><button class="btn full" id="saveChallenge">Criar desafio</button></div></div>
+
+<div class="modal" id="challengeDetailModal"><div class="sheet"><div class="sheet-head"><div><h2>Desafio</h2><p>Seu tabuleiro e sua evolução.</p></div><button class="close">✕</button></div><div id="challengeDetailContent"></div></div></div>
+
+<div class="modal" id="challengeEntryModal"><div class="sheet"><div class="sheet-head"><div><h2>Registrar evolução 📈</h2><p id="challengeEntrySubtitle"></p></div><button class="close">✕</button></div><input type="hidden" id="challengeEntryId"><div class="form-row"><div class="field"><label>Novo valor</label><input id="challengeEntryValue" type="number" step="any"></div><div class="field"><label>Data</label><input id="challengeEntryDate" type="date"></div></div><div class="field"><label>Observação (opcional)</label><input id="challengeEntryNote" placeholder="Ex.: Corri sem parar pela primeira vez"></div><button class="btn full" id="saveChallengeEntry">Salvar evolução</button></div></div>
+
+<div class="modal" id="challengeGoalModal"><div class="sheet"><div class="sheet-head"><div><h2>Nova meta do desafio 🏆</h2><p id="challengeGoalSubtitle"></p></div><button class="close">✕</button></div><input type="hidden" id="challengeGoalId"><div class="form-row"><div class="field"><label>Valor da meta</label><input id="challengeGoalValue" type="number" step="any"></div><div class="field"><label>Nome da meta</label><input id="challengeGoalName" placeholder="Ex.: Primeiro 1 km"></div></div><div class="field"><label>Recompensa (opcional)</label><input id="challengeGoalReward" placeholder="Ex.: Comprar uma camiseta nova"></div><button class="btn full" id="saveChallengeGoal">Salvar meta</button></div></div>
+
+<div class="toast" id="toast"></div>
+<script>
+const DB_NAME='MinhaJornadaDB', DB_VERSION=1;
+let db, state={profile:null,weights:[],goals:[],photos:[],challenges:[]};
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const today=()=>new Date().toISOString().slice(0,10);
+const fmt=n=>Number(n).toLocaleString('pt-BR',{minimumFractionDigits:1,maximumFractionDigits:1});
+const parse=n=>Number(String(n).replace(',','.'));
+function uid(){return crypto.randomUUID?crypto.randomUUID():Date.now()+'-'+Math.random().toString(16).slice(2)}
+function toast(msg){const el=$('#toast');el.textContent=msg;el.classList.add('show');setTimeout(()=>el.classList.remove('show'),2400)}
+
+function openDB(){return new Promise((resolve,reject)=>{const r=indexedDB.open(DB_NAME,DB_VERSION);r.onupgradeneeded=e=>{const d=e.target.result;if(!d.objectStoreNames.contains('kv'))d.createObjectStore('kv',{keyPath:'key'})};r.onsuccess=()=>{db=r.result;resolve()};r.onerror=()=>reject(r.error)})}
+function dbGet(key){return new Promise((resolve,reject)=>{const r=db.transaction('kv','readonly').objectStore('kv').get(key);r.onsuccess=()=>resolve(r.result?.value??null);r.onerror=()=>reject(r.error)})}
+function dbSet(key,value){return new Promise((resolve,reject)=>{const r=db.transaction('kv','readwrite').objectStore('kv').put({key,value});r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error)})}
+function dbClear(){return new Promise((resolve,reject)=>{const r=db.transaction('kv','readwrite').objectStore('kv').clear();r.onsuccess=()=>resolve();r.onerror=()=>reject(r.error)})}
+async function load(){state.profile=await dbGet('profile');state.weights=await dbGet('weights')||[];state.goals=await dbGet('goals')||[];state.photos=await dbGet('photos')||[];state.challenges=await dbGet('challenges')||[]}
+async function saveAll(){await Promise.all([dbSet('profile',state.profile),dbSet('weights',state.weights),dbSet('goals',state.goals),dbSet('photos',state.photos),dbSet('challenges',state.challenges)])}
+function currentWeight(){if(!state.profile)return null;if(!state.weights.length)return Number(state.profile.initial);return Number([...state.weights].sort((a,b)=>(a.date+a.created).localeCompare(b.date+b.created)).at(-1).weight)}
+function progressData(){const p=state.profile;if(!p)return {pct:0,lost:0,remaining:0,current:null};const c=currentWeight(),total=p.initial-p.target,lost=Math.max(0,p.initial-c),pct=total>0?Math.max(0,Math.min(100,lost/total*100)):0;return {pct,lost:p.initial-c,remaining:Math.max(0,c-p.target),current:c,total}}
+function goalReached(g,c){return Number(c)<=Number(g.weight)}
+
+function render(){if(!state.profile)return;const p=state.profile,d=progressData();
+ $('#initialWeight').textContent=fmt(state.profile.initial)+' kg';$('#currentWeight').textContent=fmt(d.current)+' kg';$('#lostWeight').textContent=(d.lost>=0?'−':'')+fmt(Math.abs(d.lost))+' kg';$('#remainingWeight').textContent=fmt(d.remaining)+' kg';$('#progressBar').style.width=d.pct+'%';
+ $('#heroSub').textContent=`${fmt(d.pct)}% do caminho entre ${fmt(p.initial)} kg e ${fmt(p.target)} kg.`;
+ $('#heroMessage').textContent='Esforça-te e tem bom ânimo. — Josué 1:9';
+ renderBoard();renderGoals();renderWeights();renderPhotos();renderEvolution();renderChallenges();renderSettings();
+}
+function boardWeights(){
+ const p=state.profile, initial=Number(p.initial), target=Number(p.target);let vals=[initial];
+ let first=Math.floor(initial);if(Math.abs(first-initial)<1e-8)first-=1;
+ for(let w=first;w>target;w--)vals.push(Number(w.toFixed(1)));
+ vals.push(target);
+ state.goals.forEach(g=>{const w=Number(g.weight);if(w<initial&&w>target&&!vals.some(v=>Math.abs(v-w)<1e-8))vals.push(w)});
+ return [...new Set(vals.map(v=>Number(v.toFixed(1))))].sort((a,b)=>b-a);
+}
+function showGoalDetail(item,isTarget=false){
+ const modal=$('#goalDetailModal');$('#detailTitle').textContent=isTarget?'Objetivo final 🎯':(item.name||'Meta 🏆');$('#detailWeight').textContent=`${fmt(item.weight)} kg`;$('#detailReward').textContent=item.reward||'Nenhuma recompensa definida ainda.';const img=$('#detailPhoto');if(item.photo){img.src=item.photo;img.style.display='block'}else{img.removeAttribute('src');img.style.display='none'}modal.classList.add('open');
+}
+function renderBoard(){const p=state.profile,c=currentWeight(),allWeights=boardWeights();let currentIdx=0;
+ for(let i=0;i<allWeights.length;i++){if(c<=allWeights[i]+1e-8)currentIdx=i;else break}
+ if(c<=Number(p.target))currentIdx=allWeights.length-1;
+ const mode=p.boardView==='next'?'next':'all';
+ let weights=allWeights,visibleStart=0;
+ if(mode==='next'){
+  const nextGoal=[...state.goals].filter(g=>!goalReached(g,c)).sort((a,b)=>Number(b.weight)-Number(a.weight))[0];
+  const stopWeight=nextGoal?Number(nextGoal.weight):Number(p.target);
+  let stopIdx=allWeights.findIndex(v=>Math.abs(Number(v)-stopWeight)<0.051);
+  if(stopIdx<0)stopIdx=allWeights.length-1;
+  visibleStart=Math.max(0,currentIdx);
+  if(stopIdx<visibleStart)stopIdx=visibleStart;
+  weights=allWeights.slice(visibleStart,stopIdx+1);
+ }
+ const board=$('#board');board.innerHTML='';
+ weights.forEach((tileWeight,localI)=>{const i=localI+visibleStart;const tile=document.createElement('div');tile.className='tile';if(i<currentIdx)tile.classList.add('done');if(i===currentIdx)tile.classList.add('current');
+  const exactGoals=state.goals.filter(g=>Math.abs(Number(g.weight)-tileWeight)<0.051);const isTarget=Math.abs(Number(p.target)-tileWeight)<0.051;
+  if(exactGoals.length||isTarget){tile.classList.add('goal','special');const em=document.createElement('span');em.className='emoji';em.textContent=isTarget?'🎯':'🏆';tile.appendChild(em);tile.onclick=()=>{if(isTarget)showGoalDetail({weight:p.target,reward:p.targetReward||'',photo:p.targetPhoto||'',name:'Objetivo final'},true);else showGoalDetail(exactGoals[0],false)}}
+  const label=document.createElement('span');label.textContent=`${Math.round(Number(tileWeight))} kg`;tile.appendChild(label);
+  if(i===currentIdx){const y=document.createElement('span');y.className='you';y.textContent='VOCÊ';tile.appendChild(y)}board.appendChild(tile)
+ });
+ const allBtn=$('#boardViewAll'),nextBtn=$('#boardViewNext');if(allBtn&&nextBtn){allBtn.classList.toggle('active',mode==='all');nextBtn.classList.toggle('active',mode==='next');allBtn.setAttribute('aria-pressed',mode==='all'?'true':'false');nextBtn.setAttribute('aria-pressed',mode==='next'?'true':'false')}
+}
+function renderGoals(){const c=currentWeight();const sorted=[...state.goals].sort((a,b)=>Number(b.weight)-Number(a.weight));const list=$('#goalList');list.innerHTML='';if(!sorted.length)list.innerHTML='<div class="empty">Nenhuma meta intermediária ainda.</div>';
+ sorted.forEach(g=>{const done=goalReached(g,c);const el=document.createElement('div');el.className='list-item';el.innerHTML=`<div><strong>${escapeHtml(g.name||'Meta')}</strong><small>${fmt(g.weight)} kg</small><div class="goal-chip ${done?'goal-done':''}">${done?'✅ Conquistada':'🎁 '+escapeHtml(g.reward||'Recompensa a definir')}</div></div><button class="btn danger small" data-del-goal="${g.id}">Excluir</button>`;list.appendChild(el)});
+ $$('[data-del-goal]').forEach(b=>b.onclick=async()=>{state.goals=state.goals.filter(g=>g.id!==b.dataset.delGoal);await dbSet('goals',state.goals);render();toast('Meta removida')});
+ const next=[...state.goals].filter(g=>!goalReached(g,c)).sort((a,b)=>Number(b.weight)-Number(a.weight))[0];const box=$('#nextGoalBox');if(next){box.className='next-goal';box.innerHTML=`<div class="reward-icon">🎁</div><div><b>${escapeHtml(next.name||'Próxima meta')} — ${fmt(next.weight)} kg</b><span>Faltam ${fmt(Math.max(0,c-next.weight))} kg • ${escapeHtml(next.reward||'Recompensa ainda não definida')}</span></div>`}else if(state.goals.length){box.className='next-goal';box.innerHTML='<div class="reward-icon">🏆</div><div><b>Todas as metas intermediárias conquistadas!</b><span>Agora é caminho direto para o objetivo final.</span></div>'}else{box.className='empty';box.textContent='Adicione metas intermediárias para vê-las aqui.'}
+}
+function sortedWeights(){return [...state.weights].sort((a,b)=>(b.date+b.created).localeCompare(a.date+a.created))}
+function weightItem(w,index,arr){const prev=arr[index+1];const delta=prev?Number(w.weight)-Number(prev.weight):null;const div=document.createElement('div');div.className='list-item';div.innerHTML=`<div><strong>${fmt(w.weight)} kg</strong><small>${new Date(w.date+'T12:00:00').toLocaleDateString('pt-BR')}${w.note?' • '+escapeHtml(w.note):''}</small></div><div style="text-align:right">${delta!==null?`<div class="delta ${delta<=0?'down':'up'}">${delta>0?'+':''}${fmt(delta)} kg</div>`:''}<button class="btn danger small" data-del-weight="${w.id}" style="margin-top:5px">Excluir</button></div>`;return div}
+function renderWeights(){const arr=sortedWeights();for(const [selector,items] of [['#recentWeights',arr.slice(0,4)],['#allWeights',arr]]){const box=$(selector);box.innerHTML='';if(!items.length){box.innerHTML='<div class="empty">Nenhuma pesagem registrada ainda.</div>';continue}items.forEach((w,i)=>box.appendChild(weightItem(w,arr.indexOf(w),arr)))}
+ $$('[data-del-weight]').forEach(b=>b.onclick=async()=>{state.weights=state.weights.filter(w=>w.id!==b.dataset.delWeight);await dbSet('weights',state.weights);render();toast('Pesagem removida')});
+}
+function renderPhotos(){const box=$('#photoGrid');box.innerHTML='';const arr=[...state.photos].sort((a,b)=>(b.date+b.created).localeCompare(a.date+a.created));if(!arr.length){box.innerHTML='<div class="empty" style="grid-column:1/-1">Seu álbum ainda está vazio.</div>';return}arr.forEach(ph=>{const d=document.createElement('div');d.className='photo';d.innerHTML=`<img src="${ph.data}" alt="Foto de evolução"><div class="meta"><b>${ph.weight?fmt(ph.weight)+' kg':''}</b><br>${new Date(ph.date+'T12:00:00').toLocaleDateString('pt-BR')}${ph.caption?'<br>'+escapeHtml(ph.caption):''}</div>`;d.onclick=()=>{if(confirm('Excluir esta foto do álbum?')){state.photos=state.photos.filter(x=>x.id!==ph.id);dbSet('photos',state.photos).then(()=>{renderPhotos();renderEvolution();toast('Foto removida')})}};box.appendChild(d)})}
+function renderEvolution(){const box=$('#evolutionCompare');if(!box)return;const arr=[...state.photos].filter(p=>p.data&&p.date).sort((a,b)=>(a.date+(a.created||'')).localeCompare(b.date+(b.created||'')));if(arr.length<2){box.innerHTML='<div class="evolution-empty"><b>Adicione pelo menos duas fotos ao álbum 📸</b><br><br>Quando houver duas ou mais fotos com datas salvas, esta tela vai comparar automaticamente a mais antiga com a mais recente.</div>';return}const oldest=arr[0],newest=arr[arr.length-1];const card=(ph,label)=>`<div class="evolution-card"><div class="evolution-label">${label}</div><img class="evolution-photo" src="${ph.data}" alt="${label}"><div class="evolution-meta"><b>${ph.weight?fmt(ph.weight)+' kg':'Peso não informado'}</b><span>${new Date(ph.date+'T12:00:00').toLocaleDateString('pt-BR')}</span></div></div>`;box.innerHTML=`<div class="evolution-grid">${card(oldest,'Mais antiga')}${card(newest,'Mais recente')}</div><div class="evolution-caption">Comparação atualizada automaticamente conforme você adiciona novas fotos ao álbum.</div>`}
+function challengeCurrent(ch){const arr=[...(ch.entries||[])].sort((a,b)=>(a.date+(a.created||'')).localeCompare(b.date+(b.created||'')));return arr.length?Number(arr.at(-1).value):Number(ch.initial)}
+function challengeProgress(ch){const c=challengeCurrent(ch),a=Number(ch.initial),t=Number(ch.target),den=t-a;let pct=den===0?100:(c-a)/den*100;pct=Math.max(0,Math.min(100,pct));return {current:c,pct,remaining:Math.abs(t-c),direction:t>=a?1:-1}}
+function challengeFmt(v){return Number(v).toLocaleString('pt-BR',{maximumFractionDigits:3})}
+function challengeReached(ch,g){const c=challengeCurrent(ch);return Number(ch.target)>=Number(ch.initial)?c>=Number(g.value):c<=Number(g.value)}
+function challengeBoardValues(ch){const a=Number(ch.initial),t=Number(ch.target),step=Math.abs(Number(ch.step))||Math.abs(t-a)/20||1,dir=t>=a?1:-1,vals=[a];let v=a+dir*step,guard=0;while((dir>0?v<t:v>t)&&guard<500){vals.push(Number(v.toFixed(6)));v+=dir*step;guard++}(ch.goals||[]).forEach(g=>{const x=Number(g.value);if((dir>0&&x>a&&x<t)||(dir<0&&x<a&&x>t))vals.push(x)});vals.push(t);return [...new Set(vals.map(x=>Number(x.toFixed(6))))].sort((x,y)=>dir>0?x-y:y-x)}
+function renderChallenges(){const box=$('#challengeList');if(!box)return;box.innerHTML='';if(!state.challenges.length){box.innerHTML='<div class="evolution-empty" style="grid-column:1/-1"><b>Nenhum desafio criado ainda 🚀</b><br><br>Crie um desafio como Corrida, Caminhada, Natação, Leitura ou qualquer outra meta que possa ser medida.</div>';return}state.challenges.forEach(ch=>{const d=challengeProgress(ch),el=document.createElement('div');el.className='challenge-card';el.innerHTML=`<div class="challenge-top"><div style="display:flex;gap:11px"><div class="challenge-icon">${escapeHtml(ch.emoji||'🚀')}</div><div><h3>${escapeHtml(ch.name)}</h3><p>${challengeFmt(ch.initial)} ${escapeHtml(ch.unit)} → ${challengeFmt(ch.target)} ${escapeHtml(ch.unit)}</p></div></div><b>${Math.round(d.pct)}%</b></div><div class="challenge-progress"><div style="width:${d.pct}%"></div></div><div class="challenge-stats"><span>Atual: <b>${challengeFmt(d.current)} ${escapeHtml(ch.unit)}</b></span><span>Faltam: <b>${challengeFmt(d.remaining)} ${escapeHtml(ch.unit)}</b></span></div>`;el.onclick=()=>showChallengeDetail(ch.id);box.appendChild(el)})}
+function showChallengeDetail(id){const ch=state.challenges.find(x=>x.id===id);if(!ch)return;const d=challengeProgress(ch),vals=challengeBoardValues(ch);let cur=0;for(let i=0;i<vals.length;i++){if(d.direction>0){if(d.current>=vals[i]-1e-8)cur=i}else{if(d.current<=vals[i]+1e-8)cur=i}}const board=vals.map((v,i)=>{const goals=(ch.goals||[]).filter(g=>Math.abs(Number(g.value)-v)<1e-6),isTarget=Math.abs(Number(ch.target)-v)<1e-6;return `<div class="tile ${i<cur?'done ':''}${i===cur?'current ':''}${goals.length||isTarget?'goal ':''}" title="${goals.length?escapeHtml(goals[0].name||'Meta'):isTarget?'Objetivo final':''}">${goals.length||isTarget?`<span class="emoji">${isTarget?'🎯':'🏆'}</span>`:''}<span>${challengeFmt(v)}<br><small>${escapeHtml(ch.unit)}</small></span>${i===cur?'<span class="you">VOCÊ</span>':''}</div>`}).join('');const entries=[...(ch.entries||[])].sort((a,b)=>(b.date+(b.created||'')).localeCompare(a.date+(a.created||''))).map(e=>`<div class="challenge-meta"><div><b>${challengeFmt(e.value)} ${escapeHtml(ch.unit)}</b><small>${new Date(e.date+'T12:00:00').toLocaleDateString('pt-BR')}${e.note?' • '+escapeHtml(e.note):''}</small></div><button class="btn danger small" data-del-ch-entry="${e.id}">Excluir</button></div>`).join('')||'<div class="empty">Nenhuma evolução registrada além do valor inicial.</div>';const goals=[...(ch.goals||[])].sort((a,b)=>d.direction>0?Number(a.value)-Number(b.value):Number(b.value)-Number(a.value)).map(g=>`<div class="challenge-meta"><div><b>${challengeReached(ch,g)?'✅':'🏆'} ${escapeHtml(g.name||'Meta')} — ${challengeFmt(g.value)} ${escapeHtml(ch.unit)}</b><small>${escapeHtml(g.reward||'Sem recompensa definida')}</small></div><button class="btn danger small" data-del-ch-goal="${g.id}">Excluir</button></div>`).join('')||'<div class="empty">Nenhuma meta intermediária.</div>';$('#challengeDetailContent').innerHTML=`<div class="challenge-detail-head"><h2>${escapeHtml(ch.emoji||'🚀')} ${escapeHtml(ch.name)}</h2><p>${challengeFmt(ch.initial)} ${escapeHtml(ch.unit)} → ${challengeFmt(ch.target)} ${escapeHtml(ch.unit)}</p><div class="challenge-mini-stats"><div><b>${challengeFmt(ch.initial)}</b><span>INICIAL</span></div><div><b>${challengeFmt(d.current)}</b><span>ATUAL</span></div><div><b>${Math.round(d.pct)}%</b><span>PROGRESSO</span></div><div><b>${challengeFmt(d.remaining)}</b><span>FALTA</span></div></div></div><div class="card" style="padding:15px"><h3>🎲 Tabuleiro</h3><p class="sub">Cada casa vale ${challengeFmt(ch.step)} ${escapeHtml(ch.unit)}.</p><div class="board-wrap"><div class="challenge-board">${board}</div></div></div><div style="display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin:13px 0"><button class="btn" data-ch-entry="${ch.id}">+ Evolução</button><button class="btn secondary" data-ch-goal="${ch.id}">+ Meta</button><button class="btn secondary" data-edit-challenge="${ch.id}">✏️ Editar</button></div><div class="card" style="margin-top:12px"><h3>🏆 Metas</h3><div class="challenge-entry-list" style="margin-top:10px">${goals}</div></div><div class="card" style="margin-top:12px"><h3>📈 Histórico</h3><div class="challenge-entry-list" style="margin-top:10px">${entries}</div></div><button class="btn danger full" data-del-challenge="${ch.id}" style="margin-top:13px">Excluir desafio</button>`;$('#challengeDetailModal').classList.add('open');$('[data-ch-entry]').onclick=()=>openChallengeEntry(ch.id);$('[data-ch-goal]').onclick=()=>openChallengeGoal(ch.id);$('[data-edit-challenge]').onclick=()=>openChallengeEdit(ch.id);$$('[data-del-ch-entry]').forEach(b=>b.onclick=async e=>{e.stopPropagation();ch.entries=(ch.entries||[]).filter(x=>x.id!==b.dataset.delChEntry);await dbSet('challenges',state.challenges);showChallengeDetail(ch.id);renderChallenges()});$$('[data-del-ch-goal]').forEach(b=>b.onclick=async e=>{e.stopPropagation();ch.goals=(ch.goals||[]).filter(x=>x.id!==b.dataset.delChGoal);await dbSet('challenges',state.challenges);showChallengeDetail(ch.id);renderChallenges()});$('[data-del-challenge]').onclick=async()=>{if(!confirm('Excluir este desafio e todo o histórico dele?'))return;state.challenges=state.challenges.filter(x=>x.id!==ch.id);await dbSet('challenges',state.challenges);$('#challengeDetailModal').classList.remove('open');renderChallenges();toast('Desafio excluído')}}
+function openChallengeEdit(id){const ch=state.challenges.find(x=>x.id===id);if(!ch)return;$('#challengeEditId').value=ch.id;$('#challengeModalTitle').textContent='Editar desafio ✏️';$('#challengeModalSubtitle').textContent='Altere nome, valores, unidade ou tamanho das casinhas.';$('#challengeName').value=ch.name||'';$('#challengeEmoji').value=ch.emoji||'';$('#challengeInitial').value=ch.initial;$('#challengeTarget').value=ch.target;$('#challengeUnit').value=ch.unit||'';$('#challengeStep').value=ch.step;$('#saveChallenge').textContent='Salvar alterações';$('#challengeDetailModal').classList.remove('open');$('#challengeModal').classList.add('open')}
+function openChallengeEntry(id){const ch=state.challenges.find(x=>x.id===id);$('#challengeEntryId').value=id;$('#challengeEntrySubtitle').textContent=`${ch.name} • unidade: ${ch.unit}`;$('#challengeEntryValue').value=challengeCurrent(ch);$('#challengeEntryDate').value=today();$('#challengeEntryNote').value='';$('#challengeEntryModal').classList.add('open')}
+function openChallengeGoal(id){const ch=state.challenges.find(x=>x.id===id);$('#challengeGoalId').value=id;$('#challengeGoalSubtitle').textContent=`${ch.name} • objetivo final: ${challengeFmt(ch.target)} ${ch.unit}`;$('#challengeGoalValue').value='';$('#challengeGoalName').value='';$('#challengeGoalReward').value='';$('#challengeGoalModal').classList.add('open')}
+function renderSettings(){const p=state.profile;$('#setInitial').textContent=fmt(p.initial)+' kg';$('#setTarget').textContent=fmt(p.target)+' kg';$('#setHeight').textContent=fmt(p.height)+' cm';}
+function escapeHtml(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#039;','"':'&quot;'}[c]))}
+
+function setOnStep(n){$$('.on-step').forEach((e,i)=>e.classList.toggle('active',i===n));$$('.step-dot').forEach((e,i)=>e.classList.toggle('active',i<=n))}
+async function fileToData(file){return new Promise((resolve,reject)=>{const reader=new FileReader();reader.onload=()=>resolve(reader.result);reader.onerror=reject;reader.readAsDataURL(file)})}
+async function filesToPhotos(files,date,weight,caption){const out=[];for(const f of files){out.push({id:uid(),data:await fileToData(f),date,weight:weight||'',caption:caption||'',created:new Date().toISOString()})}return out}
+
+$$('nav button').forEach(b=>b.onclick=()=>{$$('nav button').forEach(x=>x.classList.remove('active'));b.classList.add('active');$$('.view').forEach(v=>v.classList.remove('active'));$('#'+b.dataset.view).classList.add('active');window.scrollTo({top:0,behavior:'smooth'})});
+$$('[data-open]').forEach(b=>b.onclick=()=>openModal(b.dataset.open));$('#quickWeight').onclick=()=>openModal('weightModal');
+function openModal(id){const m=$('#'+id);if(id==='weightModal'){ $('#weightDate').value=today();$('#weightValue').value=currentWeight()||''}if(id==='photoModal'){ $('#photoDate').value='';$('#photoWeight').value=''}if(id==='challengeModal'){ $('#challengeEditId').value='';$('#challengeModalTitle').textContent='Novo desafio 🚀';$('#challengeModalSubtitle').textContent='Crie um tabuleiro independente para qualquer objetivo mensurável.';$('#challengeName').value='';$('#challengeEmoji').value='';$('#challengeInitial').value='';$('#challengeTarget').value='';$('#challengeUnit').value='';$('#challengeStep').value='';$('#saveChallenge').textContent='Criar desafio'}if(id==='profileModal'&&state.profile){$('#editInitial').value=state.profile.initial;$('#editTarget').value=state.profile.target;$('#editHeight').value=state.profile.height;$('#editTargetReward').value=state.profile.targetReward||'';$('#editTargetPhotoHint').textContent=state.profile.targetPhoto?'Já existe uma foto salva. Selecione outra apenas se quiser substituí-la.':'Nenhuma foto motivacional salva ainda.'}m.classList.add('open')}
+$$('.modal .close').forEach(b=>b.onclick=()=>b.closest('.modal').classList.remove('open'));
+$$('[data-board-view]').forEach(b=>b.addEventListener('click',async()=>{if(!state.profile)return;state.profile.boardView=b.dataset.boardView;await dbSet('profile',state.profile);renderBoard()}));
+$$('.modal:not(.onboarding)').forEach(m=>m.addEventListener('click',e=>{if(e.target===m)m.classList.remove('open')}));
+
+$('#onNext1').onclick=()=>{const i=parse($('#onInitial').value),h=parse($('#onHeight').value);if(!i||!h)return toast('Preencha peso inicial e altura.');setOnStep(1)};$('#onBack1').onclick=()=>setOnStep(0);$('#onNext2').onclick=()=>{const i=parse($('#onInitial').value),t=parse($('#onTarget').value);if(!t||t>=i)return toast('O objetivo final precisa ser menor que o peso inicial.');setOnStep(2)};$('#onBack2').onclick=()=>setOnStep(1);
+$('#finishOnboarding').onclick=async()=>{const initial=parse($('#onInitial').value),height=parse($('#onHeight').value),target=parse($('#onTarget').value);if(!initial||!height||!target||target>=initial)return toast('Confira os dados da jornada.');const targetPhotoFile=$('#onTargetPhoto').files[0];const targetPhoto=targetPhotoFile?await fileToData(targetPhotoFile):'';state.profile={initial,height,target,targetReward:$('#onTargetReward').value.trim(),targetPhoto,step:1,created:new Date().toISOString()};state.weights=[{id:uid(),weight:initial,date:today(),note:'Peso inicial',created:new Date().toISOString()}];const gw=parse($('#onGoalWeight').value);if(gw&&gw<initial&&gw>target){const gf=$('#onGoalPhoto').files[0];const gp=gf?await fileToData(gf):'';state.goals=[{id:uid(),weight:gw,name:$('#onGoalName').value||'Meta intermediária',reward:$('#onGoalReward').value||'',photo:gp,created:new Date().toISOString()}]};const files=[...$('#onPhotos').files];const photoDate=$('#onPhotoDate').value;if(files.length&&!photoDate)return toast('Informe a data das fotos iniciais.');if(files.length)state.photos=await filesToPhotos(files,photoDate,initial,'Foto inicial');await saveAll();$('#onboardingModal').classList.remove('open');$('#onboardingModal').style.display='';render();toast('Sua jornada começou! 🎲')};
+
+$('#saveWeight').onclick=async()=>{const w=parse($('#weightValue').value),date=$('#weightDate').value;if(!w||!date)return toast('Informe peso e data.');state.weights.push({id:uid(),weight:w,date,note:$('#weightNote').value.trim(),created:new Date().toISOString()});await dbSet('weights',state.weights);$('#weightModal').classList.remove('open');$('#weightNote').value='';render();toast('Pesagem salva e tabuleiro atualizado!')};
+$('#saveGoal').onclick=async()=>{const w=parse($('#goalWeight').value),p=state.profile;if(!w||w>=p.initial||w<=p.target)return toast('A meta deve ficar entre o peso inicial e o objetivo final.');const f=$('#goalPhoto').files[0];const photo=f?await fileToData(f):'';state.goals.push({id:uid(),weight:w,name:$('#goalName').value.trim()||'Meta intermediária',reward:$('#goalReward').value.trim(),photo,created:new Date().toISOString()});await dbSet('goals',state.goals);$('#goalModal').classList.remove('open');$('#goalWeight').value=$('#goalName').value=$('#goalReward').value='';$('#goalPhoto').value='';render();toast('Meta adicionada ao tabuleiro!')};
+$('#savePhoto').onclick=async()=>{const files=[...$('#photoFiles').files],date=$('#photoDate').value;if(!files.length||!date)return toast('Selecione ao menos uma foto e a data.');const photos=await filesToPhotos(files,date,parse($('#photoWeight').value)||'', $('#photoCaption').value.trim());state.photos.push(...photos);await dbSet('photos',state.photos);$('#photoModal').classList.remove('open');$('#photoFiles').value='';$('#photoCaption').value='';renderPhotos();renderEvolution();toast('Foto salva no álbum!')};
+$('#saveProfile').onclick=async()=>{const initial=parse($('#editInitial').value),target=parse($('#editTarget').value),height=parse($('#editHeight').value);if(!initial||!target||target>=initial||!height)return toast('Confira os valores informados.');const f=$('#editTargetPhoto').files[0];const targetPhoto=f?await fileToData(f):(state.profile.targetPhoto||'');state.profile={...state.profile,initial,target,height,targetReward:$('#editTargetReward').value.trim(),targetPhoto,step:1};await dbSet('profile',state.profile);$('#profileModal').classList.remove('open');$('#editTargetPhoto').value='';render();toast('Jornada recalculada')};
+
+$('#saveChallenge').onclick=async()=>{const name=$('#challengeName').value.trim(),initial=parse($('#challengeInitial').value),target=parse($('#challengeTarget').value),unit=$('#challengeUnit').value.trim(),step=parse($('#challengeStep').value),editId=$('#challengeEditId').value;if(!name||Number.isNaN(initial)||Number.isNaN(target)||initial===target||!unit||!step||step<=0)return toast('Preencha nome, valores, unidade e tamanho da casinha.');if(editId){const ch=state.challenges.find(x=>x.id===editId);if(!ch)return toast('Desafio não encontrado.');ch.name=name;ch.emoji=$('#challengeEmoji').value.trim()||'🚀';ch.initial=initial;ch.target=target;ch.unit=unit;ch.step=step;const min=Math.min(initial,target),max=Math.max(initial,target),before=(ch.goals||[]).length;ch.goals=(ch.goals||[]).filter(g=>Number(g.value)>min&&Number(g.value)<max);await dbSet('challenges',state.challenges);$('#challengeModal').classList.remove('open');renderChallenges();showChallengeDetail(ch.id);toast(before!==ch.goals.length?'Desafio atualizado; metas fora do novo trajeto foram removidas.':'Desafio atualizado! ✏️')}else{state.challenges.push({id:uid(),name,emoji:$('#challengeEmoji').value.trim()||'🚀',initial,target,unit,step,entries:[],goals:[],created:new Date().toISOString()});await dbSet('challenges',state.challenges);$('#challengeModal').classList.remove('open');renderChallenges();toast('Novo desafio criado! 🚀')}};
+$('#saveChallengeEntry').onclick=async()=>{const ch=state.challenges.find(x=>x.id===$('#challengeEntryId').value),value=parse($('#challengeEntryValue').value),date=$('#challengeEntryDate').value;if(!ch||Number.isNaN(value)||!date)return toast('Informe valor e data.');ch.entries=ch.entries||[];ch.entries.push({id:uid(),value,date,note:$('#challengeEntryNote').value.trim(),created:new Date().toISOString()});await dbSet('challenges',state.challenges);$('#challengeEntryModal').classList.remove('open');showChallengeDetail(ch.id);renderChallenges();toast('Evolução registrada! 📈')};
+$('#saveChallengeGoal').onclick=async()=>{const ch=state.challenges.find(x=>x.id===$('#challengeGoalId').value),value=parse($('#challengeGoalValue').value);if(!ch||Number.isNaN(value))return toast('Informe o valor da meta.');const min=Math.min(Number(ch.initial),Number(ch.target)),max=Math.max(Number(ch.initial),Number(ch.target));if(value<=min||value>=max)return toast('A meta precisa ficar entre o valor inicial e o objetivo final.');ch.goals=ch.goals||[];ch.goals.push({id:uid(),value,name:$('#challengeGoalName').value.trim()||'Meta intermediária',reward:$('#challengeGoalReward').value.trim(),created:new Date().toISOString()});await dbSet('challenges',state.challenges);$('#challengeGoalModal').classList.remove('open');showChallengeDetail(ch.id);renderChallenges();toast('Meta adicionada ao desafio! 🏆')};
+
+$('#exportBtn').onclick=()=>{const payload={app:'Minha Jornada',version:4,exportedAt:new Date().toISOString(),...state};const blob=new Blob([JSON.stringify(payload)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='minha-jornada-backup-'+today()+'.json';a.click();URL.revokeObjectURL(a.href);toast('Backup exportado')};
+$('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!data.profile)throw new Error();state.profile=data.profile;state.weights=data.weights||[];state.goals=data.goals||[];state.photos=data.photos||[];state.challenges=data.challenges||[];await saveAll();render();toast('Backup importado com sucesso')}catch{toast('Arquivo de backup inválido')}e.target.value=''};
+$('#resetBtn').onclick=async()=>{if(!confirm('Tem certeza? Isso apagará pesagens, metas, fotos e outros desafios deste aparelho.'))return;await dbClear();location.reload()};
+
+(async function init(){await openDB();await load();if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});if(!state.profile){$('#onboardingModal').style.display='';$('#onboardingModal').classList.add('open')}else render();})();
+</script>
+</body>
+</html>
