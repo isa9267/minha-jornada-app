@@ -30,9 +30,7 @@ TESTE NO COMPUTADOR:
 3. Abra: http://localhost:8000
 
 INSTALAR NO CELULAR:
-A instalação como aplicativo exige que os arquivos sejam publicados em um endereço HTTPS.
-Opções simples: GitHub Pages, Netlify, Cloudflare Pages ou outro host estático.
-Depois de publicar:
+Acessar o endereço HTTPS pelo chrome.
 - Android/Chrome: abra o site > menu > Instalar app / Adicionar à tela inicial.
 - iPhone/Safari: abra o site > Compartilhar > Adicionar à Tela de Início.
 
